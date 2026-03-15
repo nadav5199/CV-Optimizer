@@ -14,6 +14,27 @@ async function connect() {
 
 connect();
 const app = express()
+app.use(express.json());
+
+app.post('/apply',async (req, res) => {
+    const {companyName, date, description} = req.body
+    try{
+        const application = new Application({
+        companyName,
+        date, 
+        description,
+    })
+    await application.save()
+    res.status(201).json(application);
+    }catch{
+        res.status(400)
+    }
+})
+
+app.get('/view',async (req, res) => {
+    const applications = await Application.find()
+    res.json(applications)
+})
 
 app.listen(8080, () => {
     console.log('Server running on port 8080')
