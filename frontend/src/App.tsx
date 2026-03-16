@@ -1,10 +1,10 @@
 import './App.css'
-import ApplicationForm from './components/ApplicationForm'
+import SubmissionsTable from './components/submissions-table/SubmissionsTable'
 function App() {
   return (
     <div className="app">
       <h1>CV Optimizer</h1>
-      <ApplicationForm/>
+      <SubmissionsTable/>
     </div>
   )
 }

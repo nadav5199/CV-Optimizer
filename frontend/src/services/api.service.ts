@@ -9,7 +9,8 @@ const api = axios.create({
 })
 
 export const applicationService = {
-    submit: (formData: ApplicationData) => api.post('/apply', formData)
+    submit: (formData: ApplicationData) => api.post('/apply', formData),
+    getAll: () => api.get('/view')
 };
 
 export default api
