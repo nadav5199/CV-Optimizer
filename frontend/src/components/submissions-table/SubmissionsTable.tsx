@@ -26,6 +26,7 @@ export default function SubmissionsTable() {
                     <th>Company Name</th>
                     <th>Title</th>
                     <th>Description</th>
+                    <th>Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,7 @@ export default function SubmissionsTable() {
                         <td>{submission.companyName}</td>
                         <td>{submission.title}</td>
                         <td>{submission.description}</td>
+                        <td>{new Date(submission.date!).toDateString()}</td>
                     </tr>
                 ))}
             </tbody>
