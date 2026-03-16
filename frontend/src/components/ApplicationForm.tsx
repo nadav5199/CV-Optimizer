@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { applicationService } from '../services/api.service'
 import type { ApplicationData } from '../types/application.types'
+import styles from './ApplicationForm.module.scss'
 
 export default function ApplicationForm(){
     const [companyName, setCompanyName] = useState('')
@@ -30,7 +31,7 @@ export default function ApplicationForm(){
         setTitle(jobTitle)
     }
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.formContainer}>
             <input type="text" name="company" placeholder="company name" value={companyName} onChange={(e) => onNameChange(e.target.value)}/>
             <input type="text" name="description" placeholder="job description" value={description} onChange={(e) => onDescriptionChange(e.target.value)}/>
             <input type="text" name="title" placeholder="job title" value={title} onChange={(e) => onTitleChange(e.target.value)}/>
