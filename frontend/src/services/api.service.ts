@@ -1,4 +1,6 @@
 import axios from 'axios'
+import type { ApplicationData } from '../types/application.types'
+
 const api = axios.create({
     baseURL: 'http://localhost:8080/',
     headers: {
@@ -7,7 +9,7 @@ const api = axios.create({
 })
 
 export const applicationService = {
-    submit: (formData) => api.post('/apply', formData)
+    submit: (formData: ApplicationData) => api.post('/apply', formData)
 };
 
 export default api

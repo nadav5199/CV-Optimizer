@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Application = require('./models/Application');
 const express = require('express')
+const cors = require('cors')
 const uri = 'mongodb://localhost:27017/CV-Optimizer';
 
 async function connect() {
@@ -14,20 +15,24 @@ async function connect() {
 
 connect();
 const app = express()
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
 app.use(express.json());
 
-app.post('/apply',async (req, res) => {
-    const {companyName, date, description} = req.body
-    try{
+app.post('/apply', async (req, res) => {
+    const { companyName, description, title } = req.body;
+    try {
         const application = new Application({
-        companyName,
-        date, 
-        description,
-    })
-    await application.save()
-    res.status(201).json(application);
-    }catch{
-        res.status(400)
+            companyName,
+            description,
+            title,
+        });
+        await application.save();
+        res.status(201).json(application);
+    } catch (error) {
+        console.error('Error saving application:', error);
+        res.status(400).json({ error: error.message });
     }
 })
 
