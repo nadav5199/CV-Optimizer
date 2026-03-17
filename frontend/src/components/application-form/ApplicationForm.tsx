@@ -21,7 +21,10 @@ export default function ApplicationForm({onClose, isOpen}: ApplicationFormProps)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const formData: ApplicationData = { companyName, description, title };
+            const formData = new FormData();
+            formData.append('companyName', companyName)
+            formData.append('description', description)
+            formData.append('title', title)
             const response = await applicationService.submit(formData);
             console.log('Success:', response.data);
             setCompanyName('');
