@@ -3,6 +3,7 @@ const Application = require('./models/Application');
 const express = require('express')
 const cors = require('cors')
 const uri = 'mongodb://localhost:27017/CV-Optimizer';
+const multer = require('multer');
 
 async function connect() {
     try {
@@ -15,18 +16,21 @@ async function connect() {
 
 connect();
 const app = express()
+const upload = multer({ storage: multer.memoryStorage() });
 app.use(cors({
     origin: 'http://localhost:5173'
 }));
 app.use(express.json());
 
-app.post('/apply', async (req, res) => {
+app.post('/apply',upload.single('cv') ,async (req, res) => {
     const { companyName, description, title } = req.body;
+    const cv = req.file?.buffer
     try {
         const application = new Application({
             companyName,
             description,
             title,
+            cv,
         });
         await application.save();
         res.status(201).json(application);

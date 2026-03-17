@@ -17,6 +17,9 @@ const applicationSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
+    },
+    cv: {
+        type: Buffer
     }
 });
 module.exports = mongoose.model('Application', applicationSchema);
