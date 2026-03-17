@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react"
 import { applicationService } from '../../services/api.service'
-import type { ApplicationData } from '../../types/application.types'
 import styles from './ApplicationForm.module.scss'
 interface ApplicationFormProps {
     onClose: () => void 
@@ -30,6 +29,7 @@ export default function ApplicationForm({onClose, isOpen}: ApplicationFormProps)
             setCompanyName('');
             setDescription('');
             setTitle('');
+            onClose()
         } catch (error) {
             console.error('Submit failed:', error);
         }

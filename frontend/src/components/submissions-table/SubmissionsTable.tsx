@@ -8,7 +8,6 @@ export default function SubmissionsTable() {
     useEffect(()=>{
         const fetchSubmissions = async () => {
             try{
-
                 const response = await applicationService.getAll()
                 setSubmissions(response.data)
             }catch(error){
