@@ -1,13 +1,23 @@
-import { useState } from "react"
-import { applicationService } from '../services/api.service'
-import type { ApplicationData } from '../types/application.types'
+import { useEffect, useRef, useState } from "react"
+import { applicationService } from '../../services/api.service'
+import type { ApplicationData } from '../../types/application.types'
 import styles from './ApplicationForm.module.scss'
-
-export default function ApplicationForm(){
+interface ApplicationFormProps {
+    onClose: () => void 
+    isOpen: boolean
+}
+export default function ApplicationForm({onClose, isOpen}: ApplicationFormProps){
     const [companyName, setCompanyName] = useState('')
     const [description, setDescription] = useState('')
     const [title, setTitle] = useState('')
-    
+    useEffect(()=>{
+        if(isOpen){
+            ref.current?.showModal()
+        }else{
+            ref.current?.close()
+        }
+    },[isOpen])
+    const ref = useRef<HTMLDialogElement>(null)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -31,11 +41,14 @@ export default function ApplicationForm(){
         setTitle(jobTitle)
     }
     return (
-        <form onSubmit={handleSubmit} className={styles.formContainer}>
-            <input type="text" name="company" placeholder="company name" value={companyName} onChange={(e) => onNameChange(e.target.value)}/>
-            <input type="text" name="description" placeholder="job description" value={description} onChange={(e) => onDescriptionChange(e.target.value)}/>
-            <input type="text" name="title" placeholder="job title" value={title} onChange={(e) => onTitleChange(e.target.value)}/>
-            <button type="submit">Submit</button>
-        </form>
+        <dialog ref={ref} onClose={onClose}> 
+            <form method="dialog" onSubmit={handleSubmit} className={styles.formContainer}>
+                <input type="text" name="company" placeholder="company name" value={companyName} onChange={(e) => onNameChange(e.target.value)}/>
+                <input type="text" name="description" placeholder="job description" value={description} onChange={(e) => onDescriptionChange(e.target.value)}/>
+                <input type="text" name="title" placeholder="job title" value={title} onChange={(e) => onTitleChange(e.target.value)}/>
+                <button type="submit">Submit</button>
+                <button type="button" onClick={onClose}>Close</button>
+            </form>
+        </dialog>
     )
 }
