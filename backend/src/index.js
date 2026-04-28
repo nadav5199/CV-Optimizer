@@ -51,7 +51,7 @@ app.get('/view/:id',async (req, res) => {
     res.json(application)
 })
 
-app.delete('/view/:id/delete',  async (res, req) => {
+app.delete('/view/:id/delete',  async (req, res) => {
     const id = req.params.id;
     const application = await Application.findByIdAndDelete(id)
     return res.status(200).json({ message: 'Deleted Succefully'});

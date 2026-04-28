@@ -18,6 +18,10 @@ export default function SubmissionsTable() {
         }
     ,[])
 
+    const handleDelete = (id: string) => {
+        applicationService.delete(id)
+    }
+
     return (
         <table className={styles.table}>
             <thead>
@@ -35,6 +39,9 @@ export default function SubmissionsTable() {
                         <td>{submission.title}</td>
                         <td>{submission.description}</td>
                         <td>{new Date(submission.date!).toDateString()}</td>
+                        <td>
+                            <button onClick={() => handleDelete(submission._id)}>X</button>
+                        </td>
                     </tr>
                 ))}
             </tbody>
