@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react"
 import { applicationService } from '../../services/api.service'
+import type { ApplicationData } from '../../types/application.types'
 import styles from './ApplicationForm.module.scss'
 interface ApplicationFormProps {
-    onClose: () => void 
+    onClose: () => void
     isOpen: boolean
+    onAdd: (item: ApplicationData) => void
 }
-export default function ApplicationForm({onClose, isOpen}: ApplicationFormProps){
+export default function ApplicationForm({onClose, isOpen, onAdd}: ApplicationFormProps){
     const [companyName, setCompanyName] = useState('')
     const [description, setDescription] = useState('')
     const [title, setTitle] = useState('')
@@ -25,7 +27,7 @@ export default function ApplicationForm({onClose, isOpen}: ApplicationFormProps)
             formData.append('description', description)
             formData.append('title', title)
             const response = await applicationService.submit(formData);
-            console.log('Success:', response.data);
+            onAdd(response.data);
             setCompanyName('');
             setDescription('');
             setTitle('');

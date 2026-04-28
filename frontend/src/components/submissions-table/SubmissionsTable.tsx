@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import type { ApplicationData } from "../../types/application.types";
 import { applicationService } from '../../services/api.service';
 import styles from './SubmissionsTable.module.scss'
 
-export default function SubmissionsTable() {
-    const [submissions, setSubmissions] = useState<ApplicationData[]>([])
+interface SubmissionsTableProps {
+    submissions: ApplicationData[]
+    setSubmissions: React.Dispatch<React.SetStateAction<ApplicationData[]>>
+}
+
+export default function SubmissionsTable({ submissions, setSubmissions }: SubmissionsTableProps) {
     useEffect(()=>{
         const fetchSubmissions = async () => {
             try{
@@ -13,13 +17,13 @@ export default function SubmissionsTable() {
             }catch(error){
                 console.error('Failed')
             }
-            }
-            fetchSubmissions()
         }
-    ,[])
+        fetchSubmissions()
+    },[])
 
-    const handleDelete = (id: string) => {
-        applicationService.delete(id)
+    const handleDelete = async (id: string) => {
+        await applicationService.delete(id)
+        setSubmissions(prev => prev.filter(s => s._id !== id))
     }
 
     return (
