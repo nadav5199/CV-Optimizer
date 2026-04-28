@@ -1,7 +1,8 @@
 import { useEffect } from "react";
+import { Table, Button } from "antd";
+import type { ColumnsType } from "antd/es/table";
 import type { ApplicationData } from "../../types/application.types";
 import { applicationService } from '../../services/api.service';
-import styles from './SubmissionsTable.module.scss'
 
 interface SubmissionsTableProps {
     submissions: ApplicationData[]
@@ -26,29 +27,21 @@ export default function SubmissionsTable({ submissions, setSubmissions }: Submis
         setSubmissions(prev => prev.filter(s => s._id !== id))
     }
 
+    const columns: ColumnsType<ApplicationData> = [
+        { title: 'Company Name', dataIndex: 'companyName', key: 'companyName' },
+        { title: 'Title', dataIndex: 'title', key: 'title' },
+        { title: 'Description', dataIndex: 'description', key: 'description' },
+        { title: 'Date', dataIndex: 'date', key: 'date', render: (date) => new Date(date).toDateString() },
+        { 
+            title: 'Action', 
+            key: 'action', 
+            render: (_, record) => (
+                <Button danger onClick={() => handleDelete(record._id)}>X</Button>
+            )
+        }
+    ];
+
     return (
-        <table className={styles.table}>
-            <thead>
-                <tr>
-                    <th>Company Name</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {submissions.map((submission, index) => (
-                    <tr key={index}>
-                        <td>{submission.companyName}</td>
-                        <td>{submission.title}</td>
-                        <td>{submission.description}</td>
-                        <td>{new Date(submission.date!).toDateString()}</td>
-                        <td>
-                            <button onClick={() => handleDelete(submission._id)}>X</button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <Table columns={columns} dataSource={submissions} rowKey="_id" />
     );
 }

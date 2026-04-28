@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button } from 'antd'
 import './App.css'
 import SubmissionsTable from './components/submissions-table/SubmissionsTable'
 import ApplicationForm from './components/application-form/ApplicationForm'
@@ -14,7 +15,7 @@ function App() {
   return (
     <div className="app">
       <h1>CV Optimizer</h1>
-      <button onClick={() => setShowModal(true)}>ADD SUBMISSION</button>
+      <Button type="primary" onClick={() => setShowModal(true)}>ADD SUBMISSION</Button>
       <ApplicationForm onClose={() => setShowModal(false)} isOpen={showModal} onAdd={handleAdd}/>
       <SubmissionsTable submissions={submissions} setSubmissions={setSubmissions}/>
     </div>
