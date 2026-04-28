@@ -1,3 +1,5 @@
+require('dotenv').config();
+const { v2: cloudinary } = require('cloudinary');
 const mongoose = require('mongoose');
 const Application = require('./models/Application');
 const express = require('express')
@@ -6,6 +8,22 @@ const cheerio = require('cheerio');
 const puppeteer = require('puppeteer');
 const uri = 'mongodb://localhost:27017/CV-Optimizer';
 const multer = require('multer');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key:    process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+function uploadToCloudinary(buffer) {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { resource_type: 'raw', folder: 'cv-optimizer' },
+            (error, result) => { if (error) return reject(error); resolve(result); }
+        );
+        stream.end(buffer);
+    });
+}
 
 async function connect() {
     try {
@@ -26,13 +44,17 @@ app.use(express.json());
 
 app.post('/apply',upload.single('cv') ,async (req, res) => {
     const { companyName, link, title } = req.body;
-    const cv = req.file?.buffer
     try {
+        let cvUrl;
+        if (req.file?.buffer) {
+            const result = await uploadToCloudinary(req.file.buffer);
+            cvUrl = result.secure_url;
+        }
         const application = new Application({
             companyName,
             link,
             title,
-            cv,
+            cvUrl,
         });
         await application.save();
         res.status(201).json(application);

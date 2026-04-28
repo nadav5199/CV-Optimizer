@@ -18,8 +18,8 @@ const applicationSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    cv: {
-        type: Buffer
+    cvUrl: {
+        type: String
     }
 });
 module.exports = mongoose.model('Application', applicationSchema);
