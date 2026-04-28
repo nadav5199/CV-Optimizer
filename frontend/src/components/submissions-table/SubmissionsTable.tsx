@@ -30,7 +30,6 @@ export default function SubmissionsTable({ submissions, setSubmissions }: Submis
     const columns: ColumnsType<ApplicationData> = [
         { title: 'Company Name', dataIndex: 'companyName', key: 'companyName' },
         { title: 'Title', dataIndex: 'title', key: 'title' },
-        { title: 'Description', dataIndex: 'description', key: 'description' },
         { title: 'Date', dataIndex: 'date', key: 'date', render: (date) => new Date(date).toDateString() },
         { 
             title: 'Action', 

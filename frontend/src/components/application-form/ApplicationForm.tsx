@@ -10,19 +10,19 @@ interface ApplicationFormProps {
 }
 export default function ApplicationForm({onClose, isOpen, onAdd}: ApplicationFormProps){
     const [companyName, setCompanyName] = useState('')
-    const [description, setDescription] = useState('')
+    const [link, setLink] = useState('')
     const [title, setTitle] = useState('')
 
     const handleSubmit = async () => {
         try {
             const formData = new FormData();
             formData.append('companyName', companyName)
-            formData.append('description', description)
+            formData.append('link', link)
             formData.append('title', title)
             const response = await applicationService.submit(formData);
             onAdd(response.data);
             setCompanyName('');
-            setDescription('');
+            setLink('');
             setTitle('');
             onClose()
         } catch (error) {
@@ -45,11 +45,11 @@ export default function ApplicationForm({onClose, isOpen, onAdd}: ApplicationFor
                         onChange={(e) => setCompanyName(e.target.value)}
                     />
                 </Form.Item>
-                <Form.Item label="Job Description">
+                <Form.Item label="Job's link">
                     <Input 
-                        placeholder="Job description" 
-                        value={description} 
-                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Job's link" 
+                        value={link} 
+                        onChange={(e) => setLink(e.target.value)}
                     />
                 </Form.Item>
                 <Form.Item label="Job Title">

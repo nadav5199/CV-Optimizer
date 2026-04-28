@@ -23,12 +23,12 @@ app.use(cors({
 app.use(express.json());
 
 app.post('/apply',upload.single('cv') ,async (req, res) => {
-    const { companyName, description, title } = req.body;
+    const { companyName, link, title } = req.body;
     const cv = req.file?.buffer
     try {
         const application = new Application({
             companyName,
-            description,
+            link,
             title,
             cv,
         });

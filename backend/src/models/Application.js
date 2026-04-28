@@ -10,7 +10,7 @@ const applicationSchema = new mongoose.Schema({
         required: true,
         default: Date.now
     },
-    description: {
+    link: {
         type: String,
         required: true
     },
