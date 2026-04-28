@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Application = require('./models/Application');
 const express = require('express')
 const cors = require('cors')
+const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
 const uri = 'mongodb://localhost:27017/CV-Optimizer';
 const multer = require('multer');
 
@@ -34,6 +36,22 @@ app.post('/apply',upload.single('cv') ,async (req, res) => {
         });
         await application.save();
         res.status(201).json(application);
+
+        // Fetch job content in the background after responding
+        try {
+            const browser = await puppeteer.launch({ headless: true });
+            const page = await browser.newPage();
+            await page.goto(link, { waitUntil: 'networkidle2', timeout: 15000 });
+            const html = await page.content();
+            await browser.close();
+
+            const $ = cheerio.load(html);
+            $('script, style, nav, header, footer').remove();
+            const text = $('body').text().replace(/\s+/g, ' ').trim();
+            console.log(`Job content fetched for "${title}" at ${link}:\n`, text.slice(0, 500));
+        } catch (fetchError) {
+            console.error('Failed to fetch job content:', fetchError.message);
+        }
     } catch (error) {
         console.error('Error saving application:', error);
         res.status(400).json({ error: error.message });
@@ -56,6 +74,7 @@ app.delete('/view/:id/delete',  async (req, res) => {
     const application = await Application.findByIdAndDelete(id)
     return res.status(200).json({ message: 'Deleted Succefully'});
 })
+
 
 app.listen(8080, () => {
     console.log('Server running on port 8080')
