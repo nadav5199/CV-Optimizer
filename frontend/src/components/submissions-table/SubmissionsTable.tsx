@@ -31,9 +31,17 @@ export default function SubmissionsTable({ submissions, setSubmissions }: Submis
         { title: 'Company Name', dataIndex: 'companyName', key: 'companyName' },
         { title: 'Title', dataIndex: 'title', key: 'title' },
         { title: 'Date', dataIndex: 'date', key: 'date', render: (date) => new Date(date).toDateString() },
-        { 
-            title: 'Action', 
-            key: 'action', 
+        {
+            title: 'CV',
+            key: 'cv',
+            render: (_: unknown, record: ApplicationData) =>
+                record.cvUrl
+                    ? <a href={`http://localhost:8080${record.cvUrl}`}>Download</a>
+                    : <span style={{ color: '#aaa' }}>—</span>
+        },
+        {
+            title: 'Action',
+            key: 'action',
             render: (_, record) => (
                 <Button danger onClick={() => handleDelete(record._id)}>X</Button>
             )

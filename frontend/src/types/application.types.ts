@@ -1,7 +1,8 @@
 export interface ApplicationData {
-    _id: string,
+    _id: string;
     companyName: string;
-    description: string;
     title: string;
-    date?: Date
+    link: string;
+    date?: Date;
+    cvUrl?: string;
 }

@@ -12,6 +12,7 @@ export default function ApplicationForm({onClose, isOpen, onAdd}: ApplicationFor
     const [companyName, setCompanyName] = useState('')
     const [link, setLink] = useState('')
     const [title, setTitle] = useState('')
+    const [cvFile, setCvFile] = useState<File | null>(null)
 
     const handleSubmit = async () => {
         try {
@@ -19,11 +20,13 @@ export default function ApplicationForm({onClose, isOpen, onAdd}: ApplicationFor
             formData.append('companyName', companyName)
             formData.append('link', link)
             formData.append('title', title)
+            if (cvFile) formData.append('cv', cvFile)
             const response = await applicationService.submit(formData);
             onAdd(response.data);
             setCompanyName('');
             setLink('');
             setTitle('');
+            setCvFile(null);
             onClose()
         } catch (error) {
             console.error('Submit failed:', error);
@@ -31,32 +34,39 @@ export default function ApplicationForm({onClose, isOpen, onAdd}: ApplicationFor
     }
 
     return (
-        <Modal 
-            title="Add Submission" 
-            open={isOpen} 
+        <Modal
+            title="Add Submission"
+            open={isOpen}
             onCancel={onClose}
             footer={null}
         >
             <Form onFinish={handleSubmit} layout="vertical">
                 <Form.Item label="Company Name">
-                    <Input 
-                        placeholder="Company name" 
-                        value={companyName} 
+                    <Input
+                        placeholder="Company name"
+                        value={companyName}
                         onChange={(e) => setCompanyName(e.target.value)}
                     />
                 </Form.Item>
                 <Form.Item label="Job's link">
-                    <Input 
-                        placeholder="Job's link" 
-                        value={link} 
+                    <Input
+                        placeholder="Job's link"
+                        value={link}
                         onChange={(e) => setLink(e.target.value)}
                     />
                 </Form.Item>
                 <Form.Item label="Job Title">
-                    <Input 
-                        placeholder="Job title" 
-                        value={title} 
+                    <Input
+                        placeholder="Job title"
+                        value={title}
                         onChange={(e) => setTitle(e.target.value)}
+                    />
+                </Form.Item>
+                <Form.Item label="CV (PDF, optional)">
+                    <input
+                        type="file"
+                        accept="application/pdf"
+                        onChange={(e) => setCvFile(e.target.files?.[0] ?? null)}
                     />
                 </Form.Item>
                 <Form.Item>
